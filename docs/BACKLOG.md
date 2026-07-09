@@ -78,13 +78,13 @@ build implements to them, QA attacks them. Story 1 is the wow moment and ships f
   - Dismissing the overlay is remembered in `localStorage` so it doesn't reappear.
   - The overlay can be dismissed with the Escape key.
 
-- [ ] **14. Sound design and mute control**
+- [x] **14. Sound design and mute control**
   - Synthesized WebAudio SFX play on hover, line select, correct, incorrect, and win.
   - The mute toggle's state persists across reloads via `localStorage`.
   - The `AudioContext` is created lazily on the first user gesture and SFX calls are guarded so
     they never throw in environments without WebAudio (e.g. test environments).
 
-- [ ] **15. Accessibility pass — keyboard and reduced motion**
+- [x] **15. Accessibility pass — keyboard and reduced motion**
   - The entire puzzle can be completed via keyboard alone (tab to a line, Enter/Space to select).
   - `prefers-reduced-motion` disables shake/particle animations while preserving all state
     changes (color flash, panel appearance).
