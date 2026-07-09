@@ -73,4 +73,27 @@ export const bugBank: Puzzle[] = [
       "float64(sum) / float64(len(nums)) so the division is done in " +
       "floating point.",
   },
+  {
+    id: "rust-boundary-01",
+    language: "rust",
+    category: "boundary",
+    title: "Palindrome check",
+    code: [
+      "fn is_palindrome(s: &str) -> bool {",
+      "    let chars: Vec<char> = s.chars().collect();",
+      "    let n = chars.len();",
+      "    for i in 0..n {",
+      "        if chars[i] != chars[n - i] {",
+      "            return false;",
+      "        }",
+      "    }",
+      "    true",
+      "}",
+    ].join("\n"),
+    buggyLine: 5,
+    explanation:
+      "The mirrored index should be n - 1 - i. As written, chars[n - i] " +
+      "reaches chars[n] when i is 0, which is out of bounds for a " +
+      "0-indexed Vec of length n and panics.",
+  },
 ];
