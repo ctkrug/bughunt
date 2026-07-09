@@ -13,7 +13,12 @@ import { browserStore } from "./storage";
 import { currentStreak, hasStreakRecord, recordResult } from "./streak";
 import { buildShareText, copyToClipboard } from "./shareCard";
 import { SoundEngine, loadMuted, saveMuted } from "./sound";
-import { buildArchive, filterArchiveByCategory, parseISODate } from "./archive";
+import {
+  buildArchive,
+  filterArchiveByCategory,
+  isPracticeDateInRange,
+  parseISODate,
+} from "./archive";
 import {
   archiveHash,
   BUG_CATEGORIES,
@@ -306,7 +311,7 @@ function renderDailyView(): void {
 
 function renderPracticeView(date: string): void {
   const parsedDate = parseISODate(date);
-  if (!parsedDate) {
+  if (!parsedDate || !isPracticeDateInRange(parsedDate, today)) {
     navigateTo(archiveHash(null));
     return;
   }
