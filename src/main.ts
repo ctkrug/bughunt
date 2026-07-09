@@ -1,7 +1,12 @@
 import "./style.css";
 import { bugBank } from "./puzzles/bank";
 import { puzzleForDate, puzzleNumberForDate } from "./dailySeed";
-import { attemptLine, createGameState, MAX_ATTEMPTS, type GameState } from "./game";
+import {
+  attemptLine,
+  createGameState,
+  MAX_ATTEMPTS,
+  type GameState,
+} from "./game";
 import { buildLineViewModels } from "./lineView";
 import { escapeHtml } from "./highlight";
 import { browserStore } from "./storage";
@@ -52,7 +57,9 @@ app.innerHTML = `
 `;
 
 const codePanel = app.querySelector<HTMLDivElement>(".code-panel")!;
-const attemptsEl = app.querySelector<HTMLParagraphElement>(".attempts-indicator")!;
+const attemptsEl = app.querySelector<HTMLParagraphElement>(
+  ".attempts-indicator",
+)!;
 const explanationEl = app.querySelector<HTMLDivElement>(".explanation-panel")!;
 const streakCountEl = app.querySelector<HTMLSpanElement>(".streak-count")!;
 const sharePanel = app.querySelector<HTMLDivElement>(".share-panel")!;
@@ -115,7 +122,10 @@ function spawnConfetti(): void {
     const piece = document.createElement("span");
     piece.className = "confetti-piece";
     piece.style.left = `${Math.random() * 100}%`;
-    piece.style.setProperty("--confetti-delay", `${(Math.random() * 0.3).toFixed(2)}s`);
+    piece.style.setProperty(
+      "--confetti-delay",
+      `${(Math.random() * 0.3).toFixed(2)}s`,
+    );
     piece.style.setProperty(
       "--confetti-drift",
       `${Math.round((Math.random() - 0.5) * 60)}px`,
@@ -175,11 +185,16 @@ copyButton.addEventListener("click", () => {
   void copyToClipboard(shareTextEl.textContent ?? "", navigator.clipboard).then(
     (ok) => {
       copyButton.classList.remove("copy-button--success", "copy-button--error");
-      copyButton.classList.add(ok ? "copy-button--success" : "copy-button--error");
+      copyButton.classList.add(
+        ok ? "copy-button--success" : "copy-button--error",
+      );
       copyButton.textContent = ok ? "Copied!" : "Copy failed";
       window.setTimeout(() => {
         copyButton.textContent = "Copy result";
-        copyButton.classList.remove("copy-button--success", "copy-button--error");
+        copyButton.classList.remove(
+          "copy-button--success",
+          "copy-button--error",
+        );
       }, 2000);
     },
   );

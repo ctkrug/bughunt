@@ -48,6 +48,8 @@ describe("buildLineViewModels", () => {
 
   it("produces syntax-highlighted, HTML-escaped markup per line", () => {
     const vms = buildLineViewModels(createGameState(puzzle));
-    expect(vms[0]!.html).toContain('<span class="token-keyword">function</span>');
+    expect(vms[0]!.html).toContain(
+      '<span class="token-keyword">function</span>',
+    );
   });
 });

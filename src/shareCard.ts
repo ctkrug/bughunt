@@ -24,7 +24,9 @@ function attemptGrid(input: ShareCardInput): string {
  * had the same outcome.
  */
 export function buildShareText(input: ShareCardInput): string {
-  const score = input.won ? `${input.attemptsUsed}/${MAX_ATTEMPTS}` : `X/${MAX_ATTEMPTS}`;
+  const score = input.won
+    ? `${input.attemptsUsed}/${MAX_ATTEMPTS}`
+    : `X/${MAX_ATTEMPTS}`;
   const lines = [
     `Bughunt #${input.puzzleNumber} — ${score}`,
     attemptGrid(input),

@@ -274,7 +274,9 @@ button {
   cursor: default;
 }
 
-.code-line:disabled:not(.code-line--correct):not(.code-line--incorrect):not(.code-line--revealed) {
+.code-line:disabled:not(.code-line--correct):not(.code-line--incorrect):not(
+    .code-line--revealed
+  ) {
   opacity: 0.55;
 }
 
