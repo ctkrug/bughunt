@@ -7,8 +7,10 @@ import { escapeHtml } from "./highlight";
 import { browserStore } from "./storage";
 import { currentStreak, recordResult } from "./streak";
 import { buildShareText, copyToClipboard } from "./shareCard";
+import { SoundEngine, loadMuted, saveMuted } from "./sound";
 
 const store = browserStore();
+const sound = new SoundEngine(loadMuted(store));
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
 const today = new Date();
@@ -20,9 +22,12 @@ let gameState: GameState = createGameState(puzzle);
 app.innerHTML = `
   <header class="site-header">
     <div class="wordmark"><span class="wordmark-glyph" aria-hidden="true">//</span>bughunt</div>
-    <div class="streak-badge" role="status" aria-live="polite">
-      <span class="streak-flame" aria-hidden="true">🔥</span>
-      <span class="streak-count">0</span>
+    <div class="header-controls">
+      <div class="streak-badge" role="status" aria-live="polite">
+        <span class="streak-flame" aria-hidden="true">🔥</span>
+        <span class="streak-count">0</span>
+      </div>
+      <button type="button" class="icon-button mute-toggle" aria-pressed="false">🔊</button>
     </div>
   </header>
   <main class="board">
@@ -53,6 +58,7 @@ const streakCountEl = app.querySelector<HTMLSpanElement>(".streak-count")!;
 const sharePanel = app.querySelector<HTMLDivElement>(".share-panel")!;
 const shareTextEl = app.querySelector<HTMLPreElement>(".share-text")!;
 const copyButton = app.querySelector<HTMLButtonElement>(".copy-button")!;
+const muteButton = app.querySelector<HTMLButtonElement>(".mute-toggle")!;
 
 function renderCodePanel(state: GameState): void {
   const lines = buildLineViewModels(state);
@@ -117,15 +123,27 @@ function renderShare(state: GameState, streak: number): void {
   sharePanel.hidden = false;
 }
 
+function renderMuteButton(): void {
+  const muted = sound.isMuted();
+  muteButton.textContent = muted ? "🔇" : "🔊";
+  muteButton.setAttribute("aria-pressed", String(muted));
+  muteButton.setAttribute("aria-label", muted ? "Unmute sound" : "Mute sound");
+}
+
 function handleAttempt(line: number): void {
   if (gameState.status !== "playing") return;
-  gameState = attemptLine(gameState, line).state;
+  const { state: nextState, result } = attemptLine(gameState, line);
+  gameState = nextState;
   renderCodePanel(gameState);
   renderAttempts(gameState);
   renderExplanation(gameState);
 
+  sound.play(result === "correct" ? "correct" : "incorrect");
+
   if (gameState.status !== "playing") {
-    const streak = recordResult(store, puzzleNumber, gameState.status === "won");
+    const won = gameState.status === "won";
+    if (won) sound.play("win");
+    const streak = recordResult(store, puzzleNumber, won);
     renderStreak(streak);
     renderShare(gameState, streak);
   }
@@ -153,7 +171,29 @@ codePanel.addEventListener("click", (event) => {
   handleAttempt(Number(target.dataset.line));
 });
 
+let lastHoveredLine: number | null = null;
+function handleLineHover(event: Event): void {
+  const target = (event.target as HTMLElement).closest<HTMLButtonElement>(
+    ".code-line",
+  );
+  if (!target || target.disabled) return;
+  const line = Number(target.dataset.line);
+  if (line === lastHoveredLine) return;
+  lastHoveredLine = line;
+  sound.play("select");
+}
+codePanel.addEventListener("mouseover", handleLineHover);
+codePanel.addEventListener("focusin", handleLineHover);
+
+muteButton.addEventListener("click", () => {
+  const muted = !sound.isMuted();
+  sound.setMuted(muted);
+  saveMuted(store, muted);
+  renderMuteButton();
+});
+
 renderCodePanel(gameState);
 renderAttempts(gameState);
 renderExplanation(gameState);
 renderStreak(currentStreak(store, puzzleNumber));
+renderMuteButton();
