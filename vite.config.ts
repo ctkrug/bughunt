@@ -5,6 +5,8 @@ import { defineConfig } from "vite";
 export default defineConfig({
   base: "./",
   build: {
-    outDir: "dist",
+    // The publisher serves this directory as the live site at
+    // apps.charliekrug.com/bughunt, so the built app IS the landing page.
+    outDir: "site",
   },
 });
