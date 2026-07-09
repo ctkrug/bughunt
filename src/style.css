@@ -286,8 +286,8 @@ button {
 }
 
 .line-code {
-  white-space: pre;
-  overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .token-keyword {
