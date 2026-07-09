@@ -207,6 +207,57 @@ export const bugBank: Puzzle[] = [
       "floating point.",
   },
   {
+    id: "go-off-by-one-01",
+    language: "go",
+    category: "off-by-one",
+    title: "Last element of a slice",
+    code: [
+      "func lastElement(nums []int) int {",
+      "    return nums[len(nums)]",
+      "}",
+    ].join("\n"),
+    buggyLine: 2,
+    explanation:
+      "Valid indices run from 0 to len(nums) - 1. nums[len(nums)] is one " +
+      "past the end and panics with index out of range. It should be " +
+      "nums[len(nums)-1].",
+  },
+  {
+    id: "go-null-check-01",
+    language: "go",
+    category: "null-check",
+    title: "Read a user's name",
+    code: ["func userName(u *User) string {", "    return u.Name", "}"].join(
+      "\n",
+    ),
+    buggyLine: 2,
+    explanation:
+      "u can be nil, for example when a lookup fails. Dereferencing it " +
+      'unconditionally panics; the function should check "if u == nil { ' +
+      'return "" }" first.',
+  },
+  {
+    id: "go-scoping-01",
+    language: "go",
+    category: "scoping",
+    title: "Start a worker per id",
+    code: [
+      "func startWorkers(ids []int) {",
+      "    for _, id := range ids {",
+      "        go func() {",
+      "            fmt.Println(id)",
+      "        }()",
+      "    }",
+      "}",
+    ].join("\n"),
+    buggyLine: 3,
+    explanation:
+      "Before Go 1.22, the loop variable id is reused every iteration, so " +
+      "goroutines that run after the loop advances can all observe the " +
+      "same final id. Pass it as a parameter — go func(id int) { ... " +
+      "}(id) — to capture the value at that iteration.",
+  },
+  {
     id: "rust-boundary-01",
     language: "rust",
     category: "boundary",
