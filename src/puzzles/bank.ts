@@ -36,4 +36,20 @@ export const bugBank: Puzzle[] = [
       "name.length without checking. Calling greetingLength(null) throws " +
       "instead of returning a sensible length.",
   },
+  {
+    id: "py-mutation-01",
+    language: "python",
+    category: "mutation",
+    title: "Append to a list",
+    code: [
+      "def append_item(item, items=[]):",
+      "    items.append(item)",
+      "    return items",
+    ].join("\n"),
+    buggyLine: 1,
+    explanation:
+      "Default arguments are evaluated once, when the function is defined " +
+      "— not once per call. Every caller that omits items shares and " +
+      "mutates the same list, so old items leak into unrelated calls.",
+  },
 ];
