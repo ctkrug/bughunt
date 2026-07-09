@@ -5,22 +5,22 @@ build implements to them, QA attacks them. Story 1 is the wow moment and ships f
 
 ## Epic 1 — Core daily puzzle loop
 
-- [ ] **1. Click-to-reveal buggy line with red/green flash and "here's why" (WOW MOMENT)**
+- [x] **1. Click-to-reveal buggy line with red/green flash and "here's why" (WOW MOMENT)**
   - Clicking the correct line flashes green and the explanation panel appears within 150ms.
   - Clicking an incorrect line flashes red and does not end the puzzle (attempts remain).
   - Every puzzle has exactly one line marked as the correct answer.
 
-- [ ] **2. Deterministic daily puzzle selection**
+- [x] **2. Deterministic daily puzzle selection**
   - The same calendar date (UTC) yields the same puzzle for every player.
   - The puzzle-number formula (days since a fixed epoch) is covered by a unit test.
   - A puzzle-bank index beyond the bank's length wraps instead of throwing or crashing.
 
-- [ ] **3. Curated bug bank with syntax highlighting across languages**
+- [x] **3. Curated bug bank with syntax highlighting across languages**
   - At least 5 languages are represented in the bank.
   - Each entry renders with language-appropriate syntax highlighting.
   - Each entry has exactly one planted bug line and a written explanation.
 
-- [ ] **4. Design polish pass — puzzle screen**
+- [x] **4. Design polish pass — puzzle screen**
   - Matches `docs/DESIGN.md` tokens and the blueprint/technical direction.
   - Composed with no dead space at 390px, 768px, and 1440px widths.
   - Every control (buttons, line rows) has themed hover, focus-visible, active, and disabled
@@ -28,23 +28,23 @@ build implements to them, QA attacks them. Story 1 is the wow moment and ships f
 
 ## Epic 2 — Streak & sharing
 
-- [ ] **5. Local streak tracking**
+- [x] **5. Local streak tracking**
   - Solving a puzzle correctly on a new day increments the streak by 1.
   - Missing a day (no solve since the last calendar day played) resets the streak to 0.
   - Streak count persists across page reloads via `localStorage`.
 
-- [ ] **6. Shareable streak/result card**
+- [x] **6. Shareable streak/result card**
   - After solving, a share card renders a Wordle-style attempt summary without revealing the bug.
   - A "copy to clipboard" button copies exactly the rendered share text.
   - Share text includes the current streak and the puzzle number.
 
-- [ ] **7. Guess attempt limit and scoring**
+- [x] **7. Guess attempt limit and scoring**
   - Each puzzle allows a maximum of 3 line-click attempts.
   - The result reflects the number of attempts used to solve.
   - Exhausting all attempts reveals the correct line, marks the puzzle failed, and resets the
     streak to 0.
 
-- [ ] **8. Design polish pass — streak/share UI**
+- [x] **8. Design polish pass — streak/share UI**
   - Share card matches `docs/DESIGN.md` tokens and remains legible/composed at 390px width.
   - The copy button shows a distinct success state and a distinct failure state.
 
