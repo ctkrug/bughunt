@@ -1,6 +1,26 @@
+import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 import { puzzleForDate, puzzleNumberForDate } from "../src/dailySeed";
 import type { Puzzle } from "../src/types";
+
+function makeBank(size: number): Puzzle[] {
+  return Array.from({ length: size }, (_, i) => ({
+    id: `p${i}`,
+    language: "javascript",
+    category: "off-by-one",
+    title: `t${i}`,
+    code: "function f() {}",
+    buggyLine: 1,
+    explanation: "e",
+  }));
+}
+
+// Bounded well above year 99 so Date.UTC never triggers the legacy
+// "two-digit year means 1900+year" quirk when rebuilding a date from parts.
+const DATE_RANGE = {
+  min: new Date(Date.UTC(1900, 0, 1)),
+  max: new Date(Date.UTC(9999, 11, 31)),
+};
 
 const samplePuzzle: Puzzle = {
   id: "sample",
@@ -41,5 +61,38 @@ describe("puzzleForDate", () => {
     // Should not throw, and should return one of the two puzzles.
     const picked = puzzleForDate(bank, farFuture);
     expect(bank).toContain(picked);
+  });
+});
+
+describe("dailySeed (property-based)", () => {
+  it("puzzleForDate always returns a bank member, for any bank size and date", () => {
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 1, max: 200 }),
+        fc.date(DATE_RANGE),
+        (bankSize, date) => {
+          const bank = makeBank(bankSize);
+          expect(bank).toContain(puzzleForDate(bank, date));
+        },
+      ),
+    );
+  });
+
+  it("puzzleNumberForDate is stable across any time-of-day on the same UTC calendar date", () => {
+    fc.assert(
+      fc.property(
+        fc.date(DATE_RANGE),
+        fc.integer({ min: 0, max: 23 }),
+        fc.integer({ min: 0, max: 23 }),
+        (date, hourA, hourB) => {
+          const y = date.getUTCFullYear();
+          const m = date.getUTCMonth();
+          const d = date.getUTCDate();
+          const a = puzzleNumberForDate(new Date(Date.UTC(y, m, d, hourA)));
+          const b = puzzleNumberForDate(new Date(Date.UTC(y, m, d, hourB)));
+          expect(a).toBe(b);
+        },
+      ),
+    );
   });
 });
