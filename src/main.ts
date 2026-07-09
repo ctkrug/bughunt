@@ -4,6 +4,11 @@ import { puzzleForDate, puzzleNumberForDate } from "./dailySeed";
 import { attemptLine, createGameState, MAX_ATTEMPTS, type GameState } from "./game";
 import { buildLineViewModels } from "./lineView";
 import { escapeHtml } from "./highlight";
+import { browserStore } from "./storage";
+import { currentStreak, recordResult } from "./streak";
+import { buildShareText, copyToClipboard } from "./shareCard";
+
+const store = browserStore();
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
 const today = new Date();
@@ -15,6 +20,10 @@ let gameState: GameState = createGameState(puzzle);
 app.innerHTML = `
   <header class="site-header">
     <div class="wordmark"><span class="wordmark-glyph" aria-hidden="true">//</span>bughunt</div>
+    <div class="streak-badge" role="status" aria-live="polite">
+      <span class="streak-flame" aria-hidden="true">🔥</span>
+      <span class="streak-count">0</span>
+    </div>
   </header>
   <main class="board">
     <section class="puzzle-card" aria-labelledby="puzzle-title">
@@ -28,6 +37,11 @@ app.innerHTML = `
       <div class="code-panel" role="list" aria-label="Puzzle code — click the buggy line"></div>
       <p class="attempts-indicator" role="status" aria-live="polite"></p>
       <div class="explanation-panel" aria-live="polite" hidden></div>
+      <div class="share-panel" hidden>
+        <p class="share-label">Share your result — no spoilers:</p>
+        <pre class="share-text"></pre>
+        <button type="button" class="copy-button">Copy result</button>
+      </div>
     </section>
   </main>
 `;
@@ -35,6 +49,10 @@ app.innerHTML = `
 const codePanel = app.querySelector<HTMLDivElement>(".code-panel")!;
 const attemptsEl = app.querySelector<HTMLParagraphElement>(".attempts-indicator")!;
 const explanationEl = app.querySelector<HTMLDivElement>(".explanation-panel")!;
+const streakCountEl = app.querySelector<HTMLSpanElement>(".streak-count")!;
+const sharePanel = app.querySelector<HTMLDivElement>(".share-panel")!;
+const shareTextEl = app.querySelector<HTMLPreElement>(".share-text")!;
+const copyButton = app.querySelector<HTMLButtonElement>(".copy-button")!;
 
 function renderCodePanel(state: GameState): void {
   const lines = buildLineViewModels(state);
@@ -80,13 +98,52 @@ function renderExplanation(state: GameState): void {
   `;
 }
 
+function renderStreak(streak: number): void {
+  streakCountEl.textContent = String(streak);
+}
+
+function renderShare(state: GameState, streak: number): void {
+  if (state.status === "playing") {
+    sharePanel.hidden = true;
+    return;
+  }
+  const text = buildShareText({
+    puzzleNumber,
+    won: state.status === "won",
+    attemptsUsed: state.attemptedLines.length,
+    streak,
+  });
+  shareTextEl.textContent = text;
+  sharePanel.hidden = false;
+}
+
 function handleAttempt(line: number): void {
   if (gameState.status !== "playing") return;
   gameState = attemptLine(gameState, line).state;
   renderCodePanel(gameState);
   renderAttempts(gameState);
   renderExplanation(gameState);
+
+  if (gameState.status !== "playing") {
+    const streak = recordResult(store, puzzleNumber, gameState.status === "won");
+    renderStreak(streak);
+    renderShare(gameState, streak);
+  }
 }
+
+copyButton.addEventListener("click", () => {
+  void copyToClipboard(shareTextEl.textContent ?? "", navigator.clipboard).then(
+    (ok) => {
+      copyButton.classList.remove("copy-button--success", "copy-button--error");
+      copyButton.classList.add(ok ? "copy-button--success" : "copy-button--error");
+      copyButton.textContent = ok ? "Copied!" : "Copy failed";
+      window.setTimeout(() => {
+        copyButton.textContent = "Copy result";
+        copyButton.classList.remove("copy-button--success", "copy-button--error");
+      }, 2000);
+    },
+  );
+});
 
 codePanel.addEventListener("click", (event) => {
   const target = (event.target as HTMLElement).closest<HTMLButtonElement>(
@@ -99,3 +156,4 @@ codePanel.addEventListener("click", (event) => {
 renderCodePanel(gameState);
 renderAttempts(gameState);
 renderExplanation(gameState);
+renderStreak(currentStreak(store, puzzleNumber));
