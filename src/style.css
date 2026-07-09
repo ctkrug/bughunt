@@ -170,6 +170,15 @@ button {
   border-color: rgba(157, 184, 217, 0.4);
 }
 
+.repo-link {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.repo-link:hover {
+  color: var(--accent);
+}
+
 .streak-badge {
   display: inline-flex;
   align-items: center;
