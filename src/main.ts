@@ -102,6 +102,28 @@ function renderExplanation(state: GameState): void {
     <p class="explanation-verdict">${won ? "Found it." : "Out of attempts."}</p>
     <p class="explanation-text">${escapeHtml(puzzle.explanation)}</p>
   `;
+  if (won) spawnConfetti();
+}
+
+/** A brief win celebration — CSS handles the actual fall/fade animation. */
+function spawnConfetti(): void {
+  const colors = ["var(--accent)", "var(--accent-support)", "var(--success)"];
+  const burst = document.createElement("div");
+  burst.className = "confetti";
+  burst.setAttribute("aria-hidden", "true");
+  for (let i = 0; i < 16; i++) {
+    const piece = document.createElement("span");
+    piece.className = "confetti-piece";
+    piece.style.left = `${Math.random() * 100}%`;
+    piece.style.setProperty("--confetti-delay", `${(Math.random() * 0.3).toFixed(2)}s`);
+    piece.style.setProperty(
+      "--confetti-drift",
+      `${Math.round((Math.random() - 0.5) * 60)}px`,
+    );
+    piece.style.background = colors[i % colors.length]!;
+    burst.appendChild(piece);
+  }
+  explanationEl.appendChild(burst);
 }
 
 function renderStreak(streak: number): void {

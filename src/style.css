@@ -369,6 +369,7 @@ button {
 /* --- explanation panel --- */
 
 .explanation-panel {
+  position: relative;
   margin-top: var(--space-4);
   padding: var(--space-4);
   border-radius: var(--radius);
@@ -476,4 +477,38 @@ button {
   border-color: var(--danger);
   background: var(--danger);
   color: var(--bg);
+}
+
+/* --- win celebration --- */
+
+.confetti {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -10px;
+  width: 6px;
+  height: 12px;
+  border-radius: 1px;
+  animation: confetti-fall 900ms var(--ease-out) forwards;
+  animation-delay: var(--confetti-delay, 0s);
+  opacity: 0;
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--confetti-drift, 0px), 140px) rotate(220deg);
+  }
 }
