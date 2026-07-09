@@ -23,23 +23,33 @@ a Wordle grid, without spoiling the bug for anyone else.
 
 ## Planned features
 
-- Curated, hand-written bug bank across several languages (off-by-one errors, null checks,
-  type coercion, scoping mistakes, and more), each with syntax highlighting and a written
-  explanation.
-- Deterministic daily puzzle selection so every player sees the same challenge on the same day.
-- Local streak tracking and a shareable, Wordle-style result card.
-- A practice-mode archive of past puzzles, filterable by category.
-- Fully keyboard-playable, with synthesized sound effects and a persistent mute toggle.
+- A practice-mode archive of past puzzles, filterable by category, that doesn't touch the
+  daily streak.
+- An expanded bug bank (30+ curated puzzles) and a first-time onboarding walkthrough.
 
 ## Stack
 
 TypeScript, [Vite](https://vitejs.dev/) for the build, [Vitest](https://vitest.dev/) for
-tests. No backend — the whole game ships as a static site.
+tests. No backend — the whole game ships as a static site; all state (streak, mute) lives in
+`localStorage`.
+
+## Development
+
+```sh
+npm install
+npm run dev      # local dev server
+npm test         # run the test suite
+npm run lint     # eslint
+npm run build    # typecheck + production build to dist/
+```
 
 ## Status
 
-Early scaffold. See [`docs/VISION.md`](docs/VISION.md) for the full design rationale and
-[`docs/BACKLOG.md`](docs/BACKLOG.md) for the build plan.
+The core loop and streak/sharing are built: click-to-reveal wow moment, deterministic daily
+puzzle, an 8-language curated bug bank, local streak tracking, and a spoiler-free share card.
+See [`docs/VISION.md`](docs/VISION.md) for the design rationale,
+[`docs/BACKLOG.md`](docs/BACKLOG.md) for the build plan, and
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for a map of the codebase.
 
 ## License
 
