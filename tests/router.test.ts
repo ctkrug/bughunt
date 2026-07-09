@@ -53,6 +53,20 @@ describe("parseHash", () => {
       category: "mutation",
     });
   });
+
+  it("ignores unrelated query params alongside a valid category", () => {
+    expect(parseHash("#/archive?sort=new&category=scoping&page=2")).toEqual({
+      view: "archive",
+      category: "scoping",
+    });
+  });
+
+  it("treats an empty category param as no filter", () => {
+    expect(parseHash("#/archive?category=")).toEqual({
+      view: "archive",
+      category: null,
+    });
+  });
 });
 
 describe("hash builders", () => {
