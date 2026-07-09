@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  ARCHIVE_LOOKBACK_DAYS,
   buildArchive,
   filterArchiveByCategory,
   parseISODate,
@@ -31,6 +32,12 @@ describe("buildArchive", () => {
     expect(entries).toHaveLength(5);
     expect(entries[0]!.date).toBe("2026-01-10");
     expect(entries[4]!.date).toBe("2026-01-06");
+  });
+
+  it("defaults to ARCHIVE_LOOKBACK_DAYS when lookbackDays is omitted", () => {
+    const bank = [makePuzzle()];
+    const entries = buildArchive(bank, new Date(Date.UTC(2026, 0, 31)));
+    expect(entries).toHaveLength(ARCHIVE_LOOKBACK_DAYS);
   });
 
   it("never includes a date after today", () => {
