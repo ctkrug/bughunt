@@ -112,4 +112,21 @@ export const bugBank: Puzzle[] = [
       "with identical characters can be different objects, so this can " +
       "reject a correct password. It should use input.equals(actual).",
   },
+  {
+    id: "c-scoping-01",
+    language: "c",
+    category: "scoping",
+    title: "Make a counter",
+    code: [
+      "int *make_counter(void) {",
+      "    int count = 0;",
+      "    return &count;",
+      "}",
+    ].join("\n"),
+    buggyLine: 3,
+    explanation:
+      "count is a local variable on the stack; its storage no longer " +
+      "exists once make_counter returns. The returned pointer dangles — " +
+      "dereferencing it is undefined behavior.",
+  },
 ];
