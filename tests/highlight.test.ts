@@ -1,5 +1,17 @@
+import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 import { highlightLine, tokenizeLine, tokensToHtml } from "../src/highlight";
+import type { Language } from "../src/types";
+
+const LANGUAGES: Language[] = [
+  "javascript",
+  "typescript",
+  "python",
+  "go",
+  "rust",
+  "java",
+  "c",
+];
 
 describe("tokenizeLine", () => {
   it("returns an empty array for an empty line", () => {
@@ -43,6 +55,52 @@ describe("tokenizeLine", () => {
   it("does not treat a quote inside a python comment as starting a string", () => {
     const tokens = tokenizeLine("# it's fine", "python");
     expect(tokens).toEqual([{ type: "comment", text: "# it's fine" }]);
+  });
+});
+
+describe("tokenizeLine (property-based)", () => {
+  it("never throws and always reconstructs the original line exactly", () => {
+    fc.assert(
+      fc.property(
+        fc.string(),
+        fc.constantFrom(...LANGUAGES),
+        (line, language) => {
+          const tokens = tokenizeLine(line, language);
+          const reconstructed = tokens.map((t) => t.text).join("");
+          expect(reconstructed).toBe(line);
+        },
+      ),
+    );
+  });
+
+  it("never produces an empty-string token", () => {
+    fc.assert(
+      fc.property(
+        fc.string(),
+        fc.constantFrom(...LANGUAGES),
+        (line, language) => {
+          const tokens = tokenizeLine(line, language);
+          expect(tokens.every((t) => t.text.length > 0)).toBe(true);
+        },
+      ),
+    );
+  });
+});
+
+describe("highlightLine (property-based)", () => {
+  it("never leaks an unescaped angle bracket into the rendered HTML", () => {
+    fc.assert(
+      fc.property(
+        fc.string(),
+        fc.constantFrom(...LANGUAGES),
+        (line, language) => {
+          const html = highlightLine(line, language);
+          // Every "<" must open one of our own token spans, never raw source text.
+          const rawTagPattern = /<(?!\/?span)/;
+          expect(rawTagPattern.test(html)).toBe(false);
+        },
+      ),
+    );
   });
 });
 
