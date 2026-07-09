@@ -94,6 +94,41 @@ button {
   margin-right: var(--space-1);
 }
 
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(94, 200, 242, 0.35);
+  background: var(--surface-1);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition:
+    background-color 160ms var(--ease-out),
+    transform 120ms var(--ease-out);
+}
+
+.icon-button:hover {
+  background: var(--surface-2);
+}
+
+.icon-button:active {
+  transform: scale(0.94);
+}
+
+.icon-button[aria-pressed="true"] {
+  color: var(--text-muted);
+  border-color: rgba(157, 184, 217, 0.4);
+}
+
 .streak-badge {
   display: inline-flex;
   align-items: center;
