@@ -4,6 +4,12 @@
   "private": true,
   "description": "A daily Wordle-style puzzle: one short function, exactly one planted bug.",
   "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ctkrug/bughunt.git"
+  },
+  "keywords": ["game", "puzzle", "typescript", "wordle-clone", "debugging"],
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
