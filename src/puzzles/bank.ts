@@ -52,4 +52,25 @@ export const bugBank: Puzzle[] = [
       "— not once per call. Every caller that omits items shares and " +
       "mutates the same list, so old items leak into unrelated calls.",
   },
+  {
+    id: "go-type-coercion-01",
+    language: "go",
+    category: "type-coercion",
+    title: "Average of a slice",
+    code: [
+      "func average(nums []int) float64 {",
+      "    sum := 0",
+      "    for _, n := range nums {",
+      "        sum += n",
+      "    }",
+      "    return float64(sum / len(nums))",
+      "}",
+    ].join("\n"),
+    buggyLine: 6,
+    explanation:
+      "sum / len(nums) divides two ints, truncating toward zero before " +
+      "the result is ever converted to float64. It should be " +
+      "float64(sum) / float64(len(nums)) so the division is done in " +
+      "floating point.",
+  },
 ];
