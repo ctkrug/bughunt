@@ -1,3 +1,4 @@
+import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 import { createMemoryStore } from "../src/storage";
 import { currentStreak, hasStreakRecord, recordResult } from "../src/streak";
@@ -40,6 +41,29 @@ describe("recordResult", () => {
     const store = createMemoryStore();
     recordResult(store, 10, false);
     expect(recordResult(store, 11, false)).toBe(0);
+  });
+});
+
+describe("recordResult (property-based)", () => {
+  it("equals the trailing run of wins across any sequence of contiguous daily results", () => {
+    fc.assert(
+      fc.property(
+        fc.array(fc.boolean(), { minLength: 1, maxLength: 30 }),
+        (results) => {
+          const store = createMemoryStore();
+          let actual = 0;
+          results.forEach((won, i) => {
+            actual = recordResult(store, i + 1, won);
+          });
+
+          let expected = 0;
+          for (const won of results) {
+            expected = won ? expected + 1 : 0;
+          }
+          expect(actual).toBe(expected);
+        },
+      ),
+    );
   });
 });
 
