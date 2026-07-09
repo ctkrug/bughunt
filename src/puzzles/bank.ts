@@ -281,6 +281,55 @@ export const bugBank: Puzzle[] = [
       "0-indexed Vec of length n and panics.",
   },
   {
+    id: "rust-null-check-01",
+    language: "rust",
+    category: "null-check",
+    title: "First word of a string",
+    code: [
+      "fn first_word(s: &str) -> &str {",
+      "    let word = s.split_whitespace().next().unwrap();",
+      "    word",
+      "}",
+    ].join("\n"),
+    buggyLine: 2,
+    explanation:
+      "split_whitespace().next() returns None for an empty or " +
+      "all-whitespace string, and unwrap() panics on None instead of " +
+      'handling it. Match the Option or use unwrap_or("").',
+  },
+  {
+    id: "rust-type-coercion-01",
+    language: "rust",
+    category: "type-coercion",
+    title: "Check if a number is positive",
+    code: ["fn is_positive(n: f64) -> bool {", "    n as i32 > 0", "}"].join(
+      "\n",
+    ),
+    buggyLine: 2,
+    explanation:
+      "n as i32 truncates toward zero, so a small positive fraction like " +
+      "0.5 becomes 0 and is wrongly reported as not positive. Compare the " +
+      "f64 directly: n > 0.0.",
+  },
+  {
+    id: "rust-boundary-02",
+    language: "rust",
+    category: "boundary",
+    title: "Deduplicate a list",
+    code: [
+      "fn deduped(items: &Vec<i32>) -> Vec<i32> {",
+      "    let mut result = items.clone();",
+      "    result.dedup();",
+      "    result",
+      "}",
+    ].join("\n"),
+    buggyLine: 3,
+    explanation:
+      "Vec::dedup only removes consecutive duplicate elements. Without " +
+      "sorting first, non-adjacent duplicates — like the two 1s in [1, " +
+      "2, 1] — survive. Sort before deduping, or use a HashSet.",
+  },
+  {
     id: "java-comparison-01",
     language: "java",
     category: "comparison",
