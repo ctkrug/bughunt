@@ -20,12 +20,10 @@ a Wordle grid, without spoiling the bug for anyone else.
   the bug and the fix.
 - **Streaks and sharing.** Solve today's puzzle to extend your streak; share a compact,
   spoiler-free result card.
-
-## Planned features
-
-- A practice-mode archive of past puzzles, filterable by category, that doesn't touch the
-  daily streak.
-- An expanded bug bank (30+ curated puzzles) and a first-time onboarding walkthrough.
+- **Practice archive.** Browse the last 30 days of puzzles, filter by bug category, and replay
+  any of them — practice results never touch your daily streak.
+- **First-time onboarding.** New visitors get a dismissible how-to-play overlay; it won't
+  reappear once dismissed.
 
 ## Stack
 
@@ -45,8 +43,10 @@ npm run build    # typecheck + production build to dist/
 
 ## Status
 
-The core loop and streak/sharing are built: click-to-reveal wow moment, deterministic daily
-puzzle, an 8-language curated bug bank, local streak tracking, and a spoiler-free share card.
+The core loop, streak/sharing, and practice archive are built: click-to-reveal wow moment,
+deterministic daily puzzle, a 32-entry curated bug bank across 7 languages and 8 bug
+categories, local streak tracking, a spoiler-free share card, a category-filterable archive of
+past puzzles in a streak-safe practice mode, sound, and onboarding.
 See [`docs/VISION.md`](docs/VISION.md) for the design rationale,
 [`docs/BACKLOG.md`](docs/BACKLOG.md) for the build plan, and
 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for a map of the codebase.
