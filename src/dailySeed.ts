@@ -24,6 +24,7 @@ export function puzzleForDate(bank: Puzzle[], date: Date): Puzzle {
     throw new Error("puzzleForDate: bank is empty");
   }
   const puzzleNumber = puzzleNumberForDate(date);
-  const index = ((puzzleNumber - 1) % bank.length + bank.length) % bank.length;
+  const index =
+    (((puzzleNumber - 1) % bank.length) + bank.length) % bank.length;
   return bank[index]!;
 }

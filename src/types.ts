@@ -1,11 +1,5 @@
 export type Language =
-  | "javascript"
-  | "typescript"
-  | "python"
-  | "go"
-  | "rust"
-  | "java"
-  | "c";
+  "javascript" | "typescript" | "python" | "go" | "rust" | "java" | "c";
 
 export type BugCategory =
   | "off-by-one"
