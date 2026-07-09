@@ -65,7 +65,9 @@ one "impure" layer: DOM construction, event wiring, and side effects (sound, sto
 - **`archive.ts`** — `buildArchive(bank, today, lookbackDays = 30)` maps the last N days onto
   their puzzles via `dailySeed`, newest first; `filterArchiveByCategory` narrows the list;
   `parseISODate` turns a route's `YYYY-MM-DD` back into a UTC `Date`, rejecting anything that
-  isn't a real calendar date. DOM-free.
+  isn't a real calendar date; `isPracticeDateInRange` bounds a parsed date to that same
+  lookback window, so the practice route handler can reject a hand-typed pre-epoch or
+  future-dated URL instead of rendering a nonsensical puzzle number. DOM-free.
 - **`onboarding.ts`** — `shouldShowOnboarding(store, hasPlayed)` composes a persisted
   dismissed-flag with a `hasPlayed` signal (from `streak.hasStreakRecord`) so the how-to-play
   overlay only ever targets a genuine first-time visitor, never a returning player whose streak
