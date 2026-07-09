@@ -5,7 +5,7 @@ export type Route =
   | { view: "archive"; category: BugCategory | null }
   | { view: "practice"; date: string };
 
-const BUG_CATEGORIES: readonly BugCategory[] = [
+export const BUG_CATEGORIES: readonly BugCategory[] = [
   "off-by-one",
   "null-check",
   "type-coercion",
