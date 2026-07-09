@@ -382,6 +382,28 @@ function renderArchiveView(category: BugCategory | null): void {
     const value = select.value as BugCategory | "";
     navigateTo(archiveHash(value === "" ? null : value));
   });
+
+  const list = viewRoot.querySelector<HTMLUListElement>(".archive-list");
+  list?.addEventListener("keydown", handleArchiveListKeydown);
+}
+
+/** Arrow-key roving focus across archive entries, on top of native tab
+ * order + Enter, so the list is comfortable to browse without a mouse. */
+function handleArchiveListKeydown(event: KeyboardEvent): void {
+  if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+  const list = event.currentTarget as HTMLUListElement;
+  const entries = Array.from(
+    list.querySelectorAll<HTMLAnchorElement>(".archive-entry"),
+  );
+  const currentIndex = entries.indexOf(
+    document.activeElement as HTMLAnchorElement,
+  );
+  if (currentIndex === -1) return;
+
+  event.preventDefault();
+  const delta = event.key === "ArrowDown" ? 1 : -1;
+  const nextIndex = (currentIndex + delta + entries.length) % entries.length;
+  entries[nextIndex]!.focus();
 }
 
 function navigateTo(hash: string): void {
