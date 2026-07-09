@@ -29,7 +29,7 @@ come back tomorrow.
 ## Key design decisions
 
 - **Curated over generated.** Every puzzle is hand-written, not LLM- or fuzzer-generated. A
-  planted bug has to be *interesting* — subtle enough to require real reading, unambiguous
+  planted bug has to be _interesting_ — subtle enough to require real reading, unambiguous
   enough that there's exactly one right answer. That only comes from careful authorship.
 - **Click, don't type.** No code editor, no syntax to get right, no "close enough" answer
   matching. The interaction is binary (which line?) so the feedback can be instant and the game

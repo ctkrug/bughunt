@@ -4,29 +4,29 @@
 
 **Blueprint/technical.** Bughunt is a diagnostic readout on an engineer's drafting table: deep
 blueprint-navy paper, hairline cyan grid lines, code presented like a schematic under
-inspection, annotations in a crisp technical monospace. Debugging *is* reading a schematic —
+inspection, annotations in a crisp technical monospace. Debugging _is_ reading a schematic —
 the visual language should make that literal, not lean on the generic "dark IDE" look every
 code-adjacent tool defaults to.
 
 ## Tokens
 
-| Token | Value | Use |
-|---|---|---|
-| `--bg` | `#0b2545` | page background (blueprint navy) |
-| `--surface-1` | `#123a63` | panel background (code card, controls) |
-| `--surface-2` | `#1b4b7a` | raised surface (hover state, active panel) |
-| `--text` | `#eaf2ff` | primary text |
-| `--text-muted` | `#9db8d9` | secondary text, line numbers, captions |
-| `--accent` | `#5ec8f2` | primary accent — cyan blueprint ink (links, focus ring, wordmark) |
-| `--accent-support` | `#ffb454` | amber — highlights, streak flame, "attempt used" marker |
-| `--success` | `#6ee7a8` | correct-line flash, win state |
-| `--danger` | `#ff6b6b` | wrong-line flash |
-| Display font | **Space Grotesk** (system fallback: `ui-sans-serif, system-ui`) | wordmark, headings |
-| UI/code font | **JetBrains Mono** (system fallback: `ui-monospace, "SFMono-Regular", monospace`) | code panel, body UI text, buttons |
-| Spacing unit | 8px scale (4/8/16/24/32/48/64) | all margins/padding |
-| Corner radius | 6px | panels and controls — sharp enough to read as technical, not brutalist |
-| Shadow/glow | soft cyan glow (`0 0 0 1px rgba(94,200,242,.35), 0 8px 24px rgba(0,0,0,.35)`) on raised/focused panels; layered drop shadow (paper-on-paper) on the code card | depth without a single flat hue |
-| Motion | UI transitions 150–200ms ease-out; game feedback (line flash, shake) 80–120ms ease-out | all interactive transitions |
+| Token              | Value                                                                                                                                                         | Use                                                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `--bg`             | `#0b2545`                                                                                                                                                     | page background (blueprint navy)                                       |
+| `--surface-1`      | `#123a63`                                                                                                                                                     | panel background (code card, controls)                                 |
+| `--surface-2`      | `#1b4b7a`                                                                                                                                                     | raised surface (hover state, active panel)                             |
+| `--text`           | `#eaf2ff`                                                                                                                                                     | primary text                                                           |
+| `--text-muted`     | `#9db8d9`                                                                                                                                                     | secondary text, line numbers, captions                                 |
+| `--accent`         | `#5ec8f2`                                                                                                                                                     | primary accent — cyan blueprint ink (links, focus ring, wordmark)      |
+| `--accent-support` | `#ffb454`                                                                                                                                                     | amber — highlights, streak flame, "attempt used" marker                |
+| `--success`        | `#6ee7a8`                                                                                                                                                     | correct-line flash, win state                                          |
+| `--danger`         | `#ff6b6b`                                                                                                                                                     | wrong-line flash                                                       |
+| Display font       | **Space Grotesk** (system fallback: `ui-sans-serif, system-ui`)                                                                                               | wordmark, headings                                                     |
+| UI/code font       | **JetBrains Mono** (system fallback: `ui-monospace, "SFMono-Regular", monospace`)                                                                             | code panel, body UI text, buttons                                      |
+| Spacing unit       | 8px scale (4/8/16/24/32/48/64)                                                                                                                                | all margins/padding                                                    |
+| Corner radius      | 6px                                                                                                                                                           | panels and controls — sharp enough to read as technical, not brutalist |
+| Shadow/glow        | soft cyan glow (`0 0 0 1px rgba(94,200,242,.35), 0 8px 24px rgba(0,0,0,.35)`) on raised/focused panels; layered drop shadow (paper-on-paper) on the code card | depth without a single flat hue                                        |
+| Motion             | UI transitions 150–200ms ease-out; game feedback (line flash, shake) 80–120ms ease-out                                                                        | all interactive transitions                                            |
 
 ## Layout intent
 

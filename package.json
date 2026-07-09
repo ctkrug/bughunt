@@ -9,7 +9,13 @@
     "type": "git",
     "url": "git+https://github.com/ctkrug/bughunt.git"
   },
-  "keywords": ["game", "puzzle", "typescript", "wordle-clone", "debugging"],
+  "keywords": [
+    "game",
+    "puzzle",
+    "typescript",
+    "wordle-clone",
+    "debugging"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
