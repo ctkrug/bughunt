@@ -413,6 +413,58 @@ export const bugBank: Puzzle[] = [
       "dereferencing it is undefined behavior.",
   },
   {
+    id: "c-boundary-01",
+    language: "c",
+    category: "boundary",
+    title: "Sum an array",
+    code: [
+      "int sum_array(int *arr, int len) {",
+      "    int total = 0;",
+      "    for (int i = 0; i <= len; i++) {",
+      "        total += arr[i];",
+      "    }",
+      "    return total;",
+      "}",
+    ].join("\n"),
+    buggyLine: 3,
+    explanation:
+      "Valid indices run from 0 to len - 1. i <= len lets i reach len, " +
+      "reading arr[len] — one element past the end, which is undefined " +
+      "behavior. It should be i < len.",
+  },
+  {
+    id: "c-comparison-01",
+    language: "c",
+    category: "comparison",
+    title: "Compare two strings",
+    code: [
+      "int is_equal(const char *a, const char *b) {",
+      "    return a == b;",
+      "}",
+    ].join("\n"),
+    buggyLine: 2,
+    explanation:
+      "a == b compares the pointer addresses, not the characters they " +
+      "point to. Two separately-allocated strings with identical content " +
+      "would compare unequal. Use strcmp(a, b) == 0.",
+  },
+  {
+    id: "c-type-coercion-01",
+    language: "c",
+    category: "type-coercion",
+    title: "Average of two ints",
+    code: [
+      "float average(int a, int b) {",
+      "    return (a + b) / 2;",
+      "}",
+    ].join("\n"),
+    buggyLine: 2,
+    explanation:
+      "a + b and 2 are both int, so / performs integer division and " +
+      "truncates before the result is ever widened to float. Cast one " +
+      "operand first: (a + b) / 2.0f.",
+  },
+  {
     id: "js-async-01",
     language: "javascript",
     category: "async",
