@@ -37,6 +37,77 @@ export const bugBank: Puzzle[] = [
       "instead of returning a sensible length.",
   },
   {
+    id: "ts-boundary-01",
+    language: "typescript",
+    category: "boundary",
+    title: "Clamp a volume level",
+    code: [
+      "function clampVolume(value: number): number {",
+      "  return Math.min(value, 100);",
+      "}",
+    ].join("\n"),
+    buggyLine: 2,
+    explanation:
+      "Math.min(value, 100) only enforces the upper bound, so a negative " +
+      "value passes straight through. It should also clamp the lower " +
+      "bound: Math.max(0, Math.min(value, 100)).",
+  },
+  {
+    id: "ts-async-01",
+    language: "typescript",
+    category: "async",
+    title: "Load a config file",
+    code: [
+      "async function loadConfig(path: string): Promise<unknown> {",
+      "  const result = readFile(path);",
+      "  return JSON.parse(result);",
+      "}",
+    ].join("\n"),
+    buggyLine: 2,
+    explanation:
+      "readFile returns a Promise<string>, but the missing await means " +
+      "result is the Promise object itself, not the resolved text — " +
+      "JSON.parse(result) receives the wrong thing entirely.",
+  },
+  {
+    id: "ts-mutation-01",
+    language: "typescript",
+    category: "mutation",
+    title: "Sort descending",
+    code: [
+      "function sortDescending(nums: number[]): number[] {",
+      "  return nums.sort((a, b) => b - a);",
+      "}",
+    ].join("\n"),
+    buggyLine: 2,
+    explanation:
+      "Array.prototype.sort mutates the array in place and returns the " +
+      "same reference, so the caller's original array is silently " +
+      "reordered too. Copy first: [...nums].sort((a, b) => b - a).",
+  },
+  {
+    id: "ts-scoping-01",
+    language: "typescript",
+    category: "scoping",
+    title: "Counter increment callback",
+    code: [
+      "class Counter {",
+      "  count = 0;",
+      "  increment() {",
+      "    return function () {",
+      "      this.count++;",
+      "    };",
+      "  }",
+      "}",
+    ].join("\n"),
+    buggyLine: 4,
+    explanation:
+      "A plain function expression gets its own this at call time instead " +
+      "of inheriting the class instance's this. When the returned function " +
+      "is invoked on its own, this.count isn't the counter at all. Use an " +
+      "arrow function to capture the enclosing this.",
+  },
+  {
     id: "py-mutation-01",
     language: "python",
     category: "mutation",
