@@ -3,6 +3,7 @@ import {
   ARCHIVE_LOOKBACK_DAYS,
   buildArchive,
   filterArchiveByCategory,
+  isPracticeDateInRange,
   parseISODate,
 } from "../src/archive";
 import type { Puzzle } from "../src/types";
@@ -88,6 +89,51 @@ describe("filterArchiveByCategory", () => {
 
   it("returns an empty array when nothing matches", () => {
     expect(filterArchiveByCategory(entries, "scoping")).toEqual([]);
+  });
+});
+
+describe("isPracticeDateInRange", () => {
+  const today = new Date(Date.UTC(2026, 0, 31));
+
+  it("accepts today itself", () => {
+    expect(isPracticeDateInRange(today, today)).toBe(true);
+  });
+
+  it("accepts the oldest day still inside the lookback window", () => {
+    const oldest = new Date(Date.UTC(2026, 0, 31 - (ARCHIVE_LOOKBACK_DAYS - 1)));
+    expect(isPracticeDateInRange(oldest, today)).toBe(true);
+  });
+
+  it("rejects the day just outside the lookback window", () => {
+    const tooOld = new Date(Date.UTC(2026, 0, 31 - ARCHIVE_LOOKBACK_DAYS));
+    expect(isPracticeDateInRange(tooOld, today)).toBe(false);
+  });
+
+  it("rejects a date in the future", () => {
+    const tomorrow = new Date(Date.UTC(2026, 1, 1));
+    expect(isPracticeDateInRange(tomorrow, today)).toBe(false);
+  });
+
+  it("rejects a date decades before the puzzle epoch", () => {
+    expect(isPracticeDateInRange(new Date(Date.UTC(1990, 0, 1)), today)).toBe(
+      false,
+    );
+  });
+
+  it("correctly counts across a leap-day boundary", () => {
+    // Feb 29 2024 is a real leap day; a naive month/day diff (ignoring how
+    // many days are actually in February) could miscount this as 1 day
+    // instead of 2.
+    const marchFirst = new Date(Date.UTC(2024, 2, 1));
+    const leapDay = new Date(Date.UTC(2024, 1, 29));
+    expect(isPracticeDateInRange(leapDay, marchFirst, 2)).toBe(true);
+    expect(isPracticeDateInRange(leapDay, marchFirst, 1)).toBe(false);
+  });
+
+  it("respects a custom lookbackDays", () => {
+    const threeDaysAgo = new Date(Date.UTC(2026, 0, 28));
+    expect(isPracticeDateInRange(threeDaysAgo, today, 4)).toBe(true);
+    expect(isPracticeDateInRange(threeDaysAgo, today, 3)).toBe(false);
   });
 });
 

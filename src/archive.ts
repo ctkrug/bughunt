@@ -58,6 +58,31 @@ export function filterArchiveByCategory(
 }
 
 /**
+ * True when `date` falls within the practice window: today or up to
+ * `lookbackDays - 1` days in the past. Used to reject hand-typed practice
+ * URLs for dates the archive never actually links to (pre-epoch, or in the
+ * future), so a manipulated hash can't surface a nonsensical puzzle number.
+ */
+export function isPracticeDateInRange(
+  date: Date,
+  today: Date,
+  lookbackDays: number = ARCHIVE_LOOKBACK_DAYS,
+): boolean {
+  const todayMidnight = Date.UTC(
+    today.getUTCFullYear(),
+    today.getUTCMonth(),
+    today.getUTCDate(),
+  );
+  const dateMidnight = Date.UTC(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+  );
+  const daysAgo = (todayMidnight - dateMidnight) / MS_PER_DAY;
+  return daysAgo >= 0 && daysAgo < lookbackDays;
+}
+
+/**
  * Parses an ISO "YYYY-MM-DD" string into a UTC midnight Date. Returns null
  * for anything malformed instead of producing an Invalid Date, so callers
  * (e.g. the practice route handler) can cleanly fall back.
