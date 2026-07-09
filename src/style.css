@@ -473,13 +473,13 @@ button {
   transform: scale(0.97);
 }
 
-.copy-button--success {
+.copy-button.copy-button--success {
   border-color: var(--success);
   background: var(--success);
   color: var(--bg);
 }
 
-.copy-button--error {
+.copy-button.copy-button--error {
   border-color: var(--danger);
   background: var(--danger);
   color: var(--bg);
