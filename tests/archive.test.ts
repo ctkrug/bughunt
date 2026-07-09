@@ -56,6 +56,13 @@ describe("buildArchive", () => {
     const night = buildArchive(bank, new Date(Date.UTC(2026, 0, 10, 23)), 1);
     expect(morning).toEqual(night);
   });
+
+  it("returns an empty archive for a zero or negative lookbackDays", () => {
+    const bank = [makePuzzle()];
+    const today = new Date(Date.UTC(2026, 0, 10));
+    expect(buildArchive(bank, today, 0)).toEqual([]);
+    expect(buildArchive(bank, today, -5)).toEqual([]);
+  });
 });
 
 describe("filterArchiveByCategory", () => {
