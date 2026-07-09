@@ -242,9 +242,10 @@ button {
 
 .code-line {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-3);
   width: 100%;
+  min-height: 44px;
   padding: var(--space-2) var(--space-3);
   background: rgba(11, 37, 69, 0.6);
   border: none;
