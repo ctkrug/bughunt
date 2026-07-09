@@ -72,3 +72,12 @@ export function currentStreak(
   if (todaysPuzzleNumber - data.lastResultPuzzleNumber > 1) return 0;
   return data.streak;
 }
+
+/**
+ * Whether this player has ever recorded a result, regardless of whether
+ * their streak is currently 0. Used to distinguish a brand-new visitor
+ * (show onboarding) from a returning player who just lost their streak.
+ */
+export function hasStreakRecord(store: KeyValueStore): boolean {
+  return store.getItem(STORAGE_KEY) !== null;
+}
