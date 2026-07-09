@@ -32,8 +32,8 @@ describe("buildLineViewModels", () => {
     const { state } = attemptLine(createGameState(puzzle), 2);
     const vms = buildLineViewModels(state);
     expect(vms[1]).toMatchObject({ state: "correct", disabled: true });
-    expect(vms[0].disabled).toBe(true);
-    expect(vms[2].disabled).toBe(true);
+    expect(vms[0]!.disabled).toBe(true);
+    expect(vms[2]!.disabled).toBe(true);
   });
 
   it("reveals the buggy line and disables all lines on a loss", () => {
@@ -48,6 +48,6 @@ describe("buildLineViewModels", () => {
 
   it("produces syntax-highlighted, HTML-escaped markup per line", () => {
     const vms = buildLineViewModels(createGameState(puzzle));
-    expect(vms[0].html).toContain('<span class="token-keyword">function</span>');
+    expect(vms[0]!.html).toContain('<span class="token-keyword">function</span>');
   });
 });
