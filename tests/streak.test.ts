@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createMemoryStore } from "../src/storage";
-import { currentStreak, recordResult } from "../src/streak";
+import { currentStreak, hasStreakRecord, recordResult } from "../src/streak";
 
 describe("recordResult", () => {
   it("starts a streak at 1 on the first ever win", () => {
@@ -73,5 +73,26 @@ describe("currentStreak", () => {
     const store = createMemoryStore();
     store.setItem("bughunt:streak:v1", "not json");
     expect(currentStreak(store, 5)).toBe(0);
+  });
+});
+
+describe("hasStreakRecord", () => {
+  it("is false for a brand-new visitor", () => {
+    const store = createMemoryStore();
+    expect(hasStreakRecord(store)).toBe(false);
+  });
+
+  it("is true after any result is recorded, even a loss", () => {
+    const store = createMemoryStore();
+    recordResult(store, 10, false);
+    expect(hasStreakRecord(store)).toBe(true);
+  });
+
+  it("stays true even once the streak drops back to 0", () => {
+    const store = createMemoryStore();
+    recordResult(store, 10, true);
+    recordResult(store, 11, false);
+    expect(currentStreak(store, 11)).toBe(0);
+    expect(hasStreakRecord(store)).toBe(true);
   });
 });
