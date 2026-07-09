@@ -3,11 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bughunt — find today's bug</title>
+    <title>Bughunt — Sharpen your debugging, one bug a day</title>
     <meta
       name="description"
-      content="A daily puzzle: one short function, exactly one planted bug. Click the line, keep your streak."
+      content="A daily puzzle for developers: one short function, one planted bug. Spot the buggy line, keep your streak, share your score. Free, in the browser."
     />
+    <meta
+      property="og:title"
+      content="Bughunt — Sharpen your debugging, one bug a day"
+    />
+    <meta
+      property="og:description"
+      content="A daily puzzle for developers: one short function, one planted bug. Spot the buggy line, keep your streak, share your score."
+    />
+    <meta property="og:type" content="website" />
     <link
       rel="icon"
       type="image/svg+xml"
@@ -23,6 +32,100 @@
   </head>
   <body>
     <div id="app"></div>
+
+    <section class="page-info" aria-labelledby="about-title">
+      <div class="page-info-inner">
+        <h2 id="about-title" class="page-info-title">
+          The daily bug-spotting puzzle for developers
+        </h2>
+        <p>
+          Bughunt is a daily puzzle for people who read code. Every day there is
+          one short function in JavaScript, TypeScript, Python, Go, Rust, Java,
+          or C, with exactly one planted bug. Your job is to find the buggy
+          line. Click it, get an instant verdict, and read a short explanation
+          of what was wrong and how to fix it. You get three attempts. Solve the
+          puzzle to keep your streak going, then share a spoiler-free result
+          grid the way you would with Wordle.
+        </p>
+        <p>
+          Every puzzle is hand-written, not generated. The bug is subtle enough
+          to make you actually read the code, but there is only ever one correct
+          line, so a solve is a real read rather than a guess. The categories
+          cover the mistakes that bite in real work: off-by-one errors, missing
+          null checks, silent type coercion, closure and scoping traps,
+          accidental mutation, forgotten awaits, reference-versus-value
+          comparisons, and boundary conditions.
+        </p>
+        <p>
+          The whole thing runs in your browser with no account and no sign-up.
+          The daily puzzle is the same for everyone on a given date, picked by a
+          fixed calendar seed, so you and a coworker can compare results. Your
+          streak, your mute preference, and whether you have seen the intro are
+          the only things stored, and they live in your browser's local storage.
+        </p>
+
+        <h3 class="page-info-subtitle">How to play</h3>
+        <ol class="page-info-steps">
+          <li>Read the function. It is short, usually three to eight lines.</li>
+          <li>
+            Click the line you think has the bug. Keyboard works too: tab to a
+            line and press Enter.
+          </li>
+          <li>
+            A correct line flashes green and reveals the explanation. A wrong
+            line flashes red and costs one of your three attempts.
+          </li>
+          <li>Come back tomorrow for a new bug and a longer streak.</li>
+        </ol>
+
+        <h3 class="page-info-subtitle">Frequently asked questions</h3>
+        <dl class="faq">
+          <dt>Is Bughunt free?</dt>
+          <dd>
+            Yes. It runs entirely in the browser with no account, no ads, and no
+            payment.
+          </dd>
+          <dt>Which languages does it cover?</dt>
+          <dd>
+            Seven: JavaScript, TypeScript, Python, Go, Rust, Java, and C. Each
+            puzzle is tagged with its language and bug category.
+          </dd>
+          <dt>Do I need to know all of those languages?</dt>
+          <dd>
+            No. The bugs are the kind that show up across languages, and every
+            puzzle comes with a plain-English explanation, so it doubles as a
+            way to pick up a new language's gotchas.
+          </dd>
+          <dt>What happens if I miss a day?</dt>
+          <dd>
+            Your streak resets. The puzzle is tied to the calendar date, so a
+            missed day breaks the run, the same as Wordle.
+          </dd>
+          <dt>Can I play older puzzles?</dt>
+          <dd>
+            Yes. The archive keeps the last 30 days, filterable by bug category.
+            Practice puzzles never touch your daily streak, so you can replay
+            freely.
+          </dd>
+          <dt>How is the daily puzzle chosen?</dt>
+          <dd>
+            A fixed epoch date maps each calendar day to one entry in the bug
+            bank, so everyone provably gets the same puzzle on the same day
+            without a server.
+          </dd>
+        </dl>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <a class="footer-cta" href="https://github.com/ctkrug/bughunt">
+        View on GitHub
+      </a>
+      <a class="footer-portfolio" href="https://apps.charliekrug.com">
+        More by Charlie Krug → apps.charliekrug.com
+      </a>
+    </footer>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
