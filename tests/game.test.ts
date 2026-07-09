@@ -1,3 +1,4 @@
+import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 import {
   MAX_ATTEMPTS,
@@ -81,6 +82,48 @@ describe("attemptLine", () => {
     attemptLine(state, 1);
     expect(state.attemptedLines).toEqual([]);
     expect(state.status).toBe("playing");
+  });
+});
+
+describe("attemptLine state machine (property-based)", () => {
+  const CLICKS = fc.array(fc.integer({ min: 1, max: 3 }), {
+    minLength: 0,
+    maxLength: 10,
+  });
+
+  it("keeps attemptsRemaining + attemptedLines.length === MAX_ATTEMPTS through any click sequence", () => {
+    fc.assert(
+      fc.property(CLICKS, (clicks) => {
+        let state = createGameState(puzzle);
+        for (const line of clicks) {
+          if (state.status !== "playing") break;
+          state = attemptLine(state, line).state;
+        }
+        expect(attemptsRemaining(state) + state.attemptedLines.length).toBe(
+          MAX_ATTEMPTS,
+        );
+      }),
+    );
+  });
+
+  it("is won only via the buggy line, and lost only after exhausting attempts without it", () => {
+    fc.assert(
+      fc.property(CLICKS, (clicks) => {
+        let state = createGameState(puzzle);
+        let winningLine: number | null = null;
+        for (const line of clicks) {
+          if (state.status !== "playing") break;
+          state = attemptLine(state, line).state;
+          if (state.status === "won") winningLine = line;
+        }
+        if (state.status === "won") {
+          expect(winningLine).toBe(puzzle.buggyLine);
+        } else if (state.status === "lost") {
+          expect(state.attemptedLines).toHaveLength(MAX_ATTEMPTS);
+          expect(state.attemptedLines).not.toContain(puzzle.buggyLine);
+        }
+      }),
+    );
   });
 });
 
