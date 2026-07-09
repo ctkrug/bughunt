@@ -124,6 +124,68 @@ export const bugBank: Puzzle[] = [
       "mutates the same list, so old items leak into unrelated calls.",
   },
   {
+    id: "py-off-by-one-01",
+    language: "python",
+    category: "off-by-one",
+    title: "Sum the first N numbers",
+    code: [
+      "def sum_first_n(nums, n):",
+      "    total = 0",
+      "    for i in range(1, n):",
+      "        total += nums[i]",
+      "    return total",
+    ].join("\n"),
+    buggyLine: 3,
+    explanation:
+      "range(1, n) starts at index 1, skipping nums[0], and stops before " +
+      "n. It sums n - 2 elements instead of the first n. It should be " +
+      "range(0, n).",
+  },
+  {
+    id: "py-boundary-01",
+    language: "python",
+    category: "boundary",
+    title: "Last N items",
+    code: ["def last_n(items, n):", "    return items[-n:]"].join("\n"),
+    buggyLine: 2,
+    explanation:
+      "-0 is just 0 in Python, so items[-0:] is the same as items[0:] — " +
+      "the entire list — instead of an empty result when n is 0.",
+  },
+  {
+    id: "py-comparison-01",
+    language: "python",
+    category: "comparison",
+    title: "Check for a duplicate",
+    code: [
+      "def has_duplicate(items):",
+      "    return items.count(items[0]) > 1",
+    ].join("\n"),
+    buggyLine: 2,
+    explanation:
+      "count(items[0]) only checks whether the first element repeats. A " +
+      "duplicate anywhere else in the list, like the pair in [1, 2, 3, " +
+      "3], goes undetected.",
+  },
+  {
+    id: "py-async-01",
+    language: "python",
+    category: "async",
+    title: "Fetch every URL",
+    code: [
+      "async def fetch_all(urls):",
+      "    results = []",
+      "    for url in urls:",
+      "        results.append(fetch(url))",
+      "    return results",
+    ].join("\n"),
+    buggyLine: 4,
+    explanation:
+      "fetch is a coroutine function, so calling it without await just " +
+      "creates a coroutine object without running it. results ends up " +
+      "full of un-awaited coroutines instead of resolved values.",
+  },
+  {
     id: "go-type-coercion-01",
     language: "go",
     category: "type-coercion",
