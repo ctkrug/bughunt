@@ -150,4 +150,66 @@ export const bugBank: Puzzle[] = [
       "returns the still-empty users array before any fetch resolves. " +
       "Use Promise.all(ids.map(...)) to actually await every fetch.",
   },
+  {
+    id: "js-off-by-one-02",
+    language: "javascript",
+    category: "off-by-one",
+    title: "First N items",
+    code: [
+      "function firstN(items, n) {",
+      "  return items.slice(0, n + 1);",
+      "}",
+    ].join("\n"),
+    buggyLine: 2,
+    explanation:
+      "slice's end index is already exclusive, so slice(0, n) returns the " +
+      "first n items. Adding + 1 grabs one extra item beyond what was asked for.",
+  },
+  {
+    id: "js-comparison-01",
+    language: "javascript",
+    category: "comparison",
+    title: "Check for a missing value",
+    code: ["function isMissing(value) {", "  return value === NaN;", "}"].join(
+      "\n",
+    ),
+    buggyLine: 2,
+    explanation:
+      "NaN is never equal to anything, including itself, so value === NaN " +
+      "is always false no matter what value is. Use Number.isNaN(value) instead.",
+  },
+  {
+    id: "js-type-coercion-01",
+    language: "javascript",
+    category: "type-coercion",
+    title: "Sum a list of prices",
+    code: [
+      "function sumPrices(prices) {",
+      '  return prices.reduce((total, price) => total + price, "0");',
+      "}",
+    ].join("\n"),
+    buggyLine: 2,
+    explanation:
+      'Seeding the accumulator with the string "0" makes + concatenate ' +
+      'instead of add ("0" + 1.99 becomes "01.99"). The initial value ' +
+      "should be the number 0.",
+  },
+  {
+    id: "js-scoping-01",
+    language: "javascript",
+    category: "scoping",
+    title: "Log each item after a delay",
+    code: [
+      "function delayedLogs(items) {",
+      "  for (var i = 0; i < items.length; i++) {",
+      "    setTimeout(() => console.log(items[i]), 10);",
+      "  }",
+      "}",
+    ].join("\n"),
+    buggyLine: 2,
+    explanation:
+      "var is function-scoped, not block-scoped, so every callback closes " +
+      "over the same i. By the time the timeouts fire, i already equals " +
+      "items.length. Declaring the loop with let gives each iteration its own i.",
+  },
 ];
