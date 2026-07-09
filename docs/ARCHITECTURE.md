@@ -6,7 +6,7 @@ Kept current as the code changes — see `CLAUDE.md`'s "Do this run" step 5 in t
 ## Shape
 
 Static TypeScript/Vite app, no backend. All persistent state (streak, mute preference) lives
-in `localStorage`. `npm run build` produces a self-contained `dist/` servable from any subpath.
+in `localStorage`. `npm run build` produces a self-contained `site/` servable from any subpath.
 
 ## Data flow
 
@@ -100,7 +100,7 @@ thin (render + wire, no logic) so that's an acceptable seam.
 npm run dev      # Vite dev server
 npm test         # vitest run
 npm run lint     # eslint . --max-warnings 0
-npm run build    # tsc --noEmit && vite build -> dist/
+npm run build    # tsc --noEmit && vite build -> site/
 ```
 
 `vite.config.ts` sets `base: "./"` so the built site works from any subpath (it's deployed at
