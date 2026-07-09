@@ -346,6 +346,56 @@ export const bugBank: Puzzle[] = [
       "reject a correct password. It should use input.equals(actual).",
   },
   {
+    id: "java-off-by-one-01",
+    language: "java",
+    category: "off-by-one",
+    title: "First N items of an array",
+    code: [
+      "static int[] firstN(int[] items, int n) {",
+      "    return Arrays.copyOfRange(items, 0, n - 1);",
+      "}",
+    ].join("\n"),
+    buggyLine: 2,
+    explanation:
+      "Arrays.copyOfRange(array, from, to) is exclusive of to, so passing " +
+      "n - 1 returns only n - 1 elements. It should be " +
+      "copyOfRange(items, 0, n).",
+  },
+  {
+    id: "java-null-check-01",
+    language: "java",
+    category: "null-check",
+    title: "Length of a name",
+    code: [
+      "static int nameLength(String name) {",
+      "    return name.length();",
+      "}",
+    ].join("\n"),
+    buggyLine: 2,
+    explanation:
+      "Calling .length() without checking for null throws a " +
+      "NullPointerException whenever a caller passes null. Guard with " +
+      "if (name == null) return 0; first.",
+  },
+  {
+    id: "java-mutation-01",
+    language: "java",
+    category: "mutation",
+    title: "Drop the first item",
+    code: [
+      "static List<Integer> withoutFirst(List<Integer> items) {",
+      "    items.remove(0);",
+      "    return items;",
+      "}",
+    ].join("\n"),
+    buggyLine: 2,
+    explanation:
+      "List.remove mutates the list in place, so any caller that keeps " +
+      "using its own items list afterward finds it silently missing its " +
+      "first element. Copy first: new ArrayList<>(items.subList(1, " +
+      "items.size())).",
+  },
+  {
     id: "c-scoping-01",
     language: "c",
     category: "scoping",
