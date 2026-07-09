@@ -96,4 +96,20 @@ export const bugBank: Puzzle[] = [
       "reaches chars[n] when i is 0, which is out of bounds for a " +
       "0-indexed Vec of length n and panics.",
   },
+  {
+    id: "java-comparison-01",
+    language: "java",
+    category: "comparison",
+    title: "Password check",
+    code: [
+      "static boolean isPassword(String input, String actual) {",
+      "    return input == actual;",
+      "}",
+    ].join("\n"),
+    buggyLine: 2,
+    explanation:
+      "== compares String references, not their contents. Two strings " +
+      "with identical characters can be different objects, so this can " +
+      "reject a correct password. It should use input.equals(actual).",
+  },
 ];
