@@ -11,19 +11,26 @@ in `localStorage`. `npm run build` produces a self-contained `dist/` servable fr
 ## Data flow
 
 ```
+location.hash
+  -> router.parseHash                                 (-> Route: daily | archive | practice)
 today's Date
-  -> dailySeed.puzzleNumberForDate / puzzleForDate   (deterministic pick from bugBank)
-  -> game.createGameState(puzzle)                    (attemptedLines: [], status: "playing")
+  -> dailySeed.puzzleNumberForDate / puzzleForDate     (deterministic pick from bugBank)
+  -> game.createGameState(puzzle)                      (attemptedLines: [], status: "playing")
   -> [user clicks a code line]
-  -> game.attemptLine(state, line)                   (pure reducer -> new GameState + result)
-  -> lineView.buildLineViewModels(state)              (GameState -> per-line render state)
+  -> game.attemptLine(state, line)                     (pure reducer -> new GameState + result)
+  -> lineView.buildLineViewModels(state)                (GameState -> per-line render state)
   -> main.ts renders the DOM from those view models
-  -> on win/loss: streak.recordResult + shareCard.buildShareText
+  -> on win/loss (daily only): streak.recordResult + shareCard.buildShareText
 ```
 
+The archive/practice path reuses the same `game.ts`/`lineView.ts` reducer, just seeded from
+`archive.buildArchive` (the last 30 days mapped onto their puzzles via `dailySeed`) instead of
+today's date, and it skips `streak.recordResult` so practice never touches the daily streak.
+
 Every stage left of `main.ts` is pure and DOM-free, so game rules, streak math, highlighting,
-and share text are all unit-tested without a browser (see `tests/`). `main.ts` is the one
-"impure" layer: DOM construction, event wiring, and side effects (sound, storage, clipboard).
+routing, and share text are all unit-tested without a browser (see `tests/`). `main.ts` is the
+one "impure" layer: DOM construction, event wiring, and side effects (sound, storage, clipboard,
+`location.hash`).
 
 ## Modules (`src/`)
 
@@ -52,23 +59,38 @@ and share text are all unit-tested without a browser (see `tests/`). `main.ts` i
   throws. `loadMuted`/`saveMuted` persist the mute toggle via `storage.ts`.
 - **`shareCard.ts`** — `buildShareText` (pure, spoiler-free Wordle-style summary) and
   `copyToClipboard` (DI'd clipboard interface, never throws).
-- **`main.ts`** — the entry point. Wires everything above into the DOM: renders today's puzzle,
-  handles clicks/keyboard activation on code lines, updates the attempts indicator and
-  explanation panel, spawns the win confetti, and wires the streak badge, mute toggle, and
-  share/copy button.
+- **`router.ts`** — `parseHash(location.hash)` -> `Route` (`daily` / `archive` with an optional
+  category / `practice` with a date), plus `archiveHash`/`practiceHash`/`DAILY_HASH` builders.
+  Unrecognized or malformed hashes fall back to `daily` instead of throwing. DOM-free.
+- **`archive.ts`** — `buildArchive(bank, today, lookbackDays = 30)` maps the last N days onto
+  their puzzles via `dailySeed`, newest first; `filterArchiveByCategory` narrows the list;
+  `parseISODate` turns a route's `YYYY-MM-DD` back into a UTC `Date`, rejecting anything that
+  isn't a real calendar date. DOM-free.
+- **`onboarding.ts`** — `shouldShowOnboarding(store, hasPlayed)` composes a persisted
+  dismissed-flag with a `hasPlayed` signal (from `streak.hasStreakRecord`) so the how-to-play
+  overlay only ever targets a genuine first-time visitor, never a returning player whose streak
+  dropped to 0.
+- **`main.ts`** — the entry point. Renders the persistent header (wordmark, Today/Archive nav,
+  streak badge, mute toggle) once, then a `hashchange`-driven router swaps `#view-root` between
+  the daily view, the archive/filter view, and a practice view. The click-to-reveal puzzle
+  screen itself (code panel, attempts, explanation, confetti, optional share panel) is built by
+  one shared `renderPuzzleScreen`, reused by both daily and practice so there's a single
+  implementation of the core loop. Daily and practice `GameState` are cached in module scope so
+  switching views mid-puzzle doesn't lose progress. Also shows the onboarding overlay
+  (dismiss via its button or Escape) on first load when warranted.
 - **`style.css`** — design tokens (`docs/DESIGN.md`) as CSS custom properties, plus every
   component's states (hover/focus/active/disabled), the code-line flash keyframes, the
-  confetti win celebration, `prefers-reduced-motion` overrides, and responsive breakpoints at
-  768px/480px.
+  confetti win celebration, the archive card grid, the onboarding overlay,
+  `prefers-reduced-motion` overrides, and responsive breakpoints at 768px/480px.
 
 ## Tests (`tests/`)
 
 One file per `src/` module (`game`, `streak`, `sound`, `highlight`, `bank`, `lineView`,
-`shareCard`, `dailySeed`), covering the happy path plus boundaries (empty bank, exhausted
-attempts, corrupted localStorage, missing WebAudio, clipboard failure). Run with
-`npm test` (Vitest). No DOM tests — the DOM-free architecture above means `main.ts` is the
-only file that isn't directly unit tested; it's kept thin (render + wire, no logic) so that's
-an acceptable seam.
+`shareCard`, `dailySeed`, `router`, `archive`, `onboarding`), covering the happy path plus
+boundaries (empty bank, exhausted attempts, corrupted localStorage, missing WebAudio, clipboard
+failure, malformed hashes/dates). Run with `npm test` (Vitest). No DOM tests — the DOM-free
+architecture above means `main.ts` is the only file that isn't directly unit tested; it's kept
+thin (render + wire, no logic) so that's an acceptable seam.
 
 ## Build & run
 
