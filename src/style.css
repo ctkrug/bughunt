@@ -151,7 +151,13 @@ button {
   flex: 1;
   display: flex;
   justify-content: center;
+  align-items: center;
   padding: var(--space-5);
+  background: radial-gradient(
+    ellipse 60% 55% at 50% 50%,
+    rgba(94, 200, 242, 0.1),
+    transparent 70%
+  );
 }
 
 .puzzle-card {
