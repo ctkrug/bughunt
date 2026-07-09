@@ -129,4 +129,25 @@ export const bugBank: Puzzle[] = [
       "exists once make_counter returns. The returned pointer dangles — " +
       "dereferencing it is undefined behavior.",
   },
+  {
+    id: "js-async-01",
+    language: "javascript",
+    category: "async",
+    title: "Fetch all users",
+    code: [
+      "async function fetchAllUsers(ids) {",
+      "  const users = [];",
+      "  ids.forEach(async (id) => {",
+      "    const user = await fetchUser(id);",
+      "    users.push(user);",
+      "  });",
+      "  return users;",
+      "}",
+    ].join("\n"),
+    buggyLine: 3,
+    explanation:
+      "forEach doesn't wait for its async callbacks, so fetchAllUsers " +
+      "returns the still-empty users array before any fetch resolves. " +
+      "Use Promise.all(ids.map(...)) to actually await every fetch.",
+  },
 ];
