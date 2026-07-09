@@ -512,3 +512,24 @@ button {
     transform: translate(var(--confetti-drift, 0px), 140px) rotate(220deg);
   }
 }
+
+/* --- reduced motion: keep color/state feedback, drop movement --- */
+
+@media (prefers-reduced-motion: reduce) {
+  .code-line--correct,
+  .code-line--incorrect,
+  .explanation-panel,
+  .share-panel {
+    animation: none;
+  }
+
+  .confetti {
+    display: none;
+  }
+
+  .code-line,
+  .icon-button,
+  .copy-button {
+    transition: none;
+  }
+}
