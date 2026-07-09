@@ -100,7 +100,9 @@ describe("isPracticeDateInRange", () => {
   });
 
   it("accepts the oldest day still inside the lookback window", () => {
-    const oldest = new Date(Date.UTC(2026, 0, 31 - (ARCHIVE_LOOKBACK_DAYS - 1)));
+    const oldest = new Date(
+      Date.UTC(2026, 0, 31 - (ARCHIVE_LOOKBACK_DAYS - 1)),
+    );
     expect(isPracticeDateInRange(oldest, today)).toBe(true);
   });
 
