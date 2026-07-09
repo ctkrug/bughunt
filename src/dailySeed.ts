@@ -17,13 +17,18 @@ export function puzzleNumberForDate(date: Date): number {
 
 /**
  * Picks today's puzzle from the bank. The puzzle number wraps around the
- * bank length so an empty-looking future date never throws.
+ * bank length so any far-future date still maps to a real entry. Throws on
+ * an empty bank or an invalid Date rather than returning `undefined` and
+ * lying about the `Puzzle` return type.
  */
 export function puzzleForDate(bank: Puzzle[], date: Date): Puzzle {
   if (bank.length === 0) {
     throw new Error("puzzleForDate: bank is empty");
   }
   const puzzleNumber = puzzleNumberForDate(date);
+  if (!Number.isFinite(puzzleNumber)) {
+    throw new Error("puzzleForDate: invalid date");
+  }
   const index =
     (((puzzleNumber - 1) % bank.length) + bank.length) % bank.length;
   return bank[index]!;

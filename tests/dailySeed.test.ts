@@ -17,10 +17,14 @@ function makeBank(size: number): Puzzle[] {
 
 // Bounded well above year 99 so Date.UTC never triggers the legacy
 // "two-digit year means 1900+year" quirk when rebuilding a date from parts.
+// noInvalidDate keeps fast-check from generating `new Date(NaN)`, which isn't
+// a real input the daily-seed math is meant to accept (see the explicit
+// invalid-date test below for that contract).
 const DATE_RANGE = {
   min: new Date(Date.UTC(1900, 0, 1)),
   max: new Date(Date.UTC(9999, 11, 31)),
-};
+  noInvalidDate: true,
+} as const;
 
 const samplePuzzle: Puzzle = {
   id: "sample",
@@ -61,6 +65,10 @@ describe("puzzleForDate", () => {
     // Should not throw, and should return one of the two puzzles.
     const picked = puzzleForDate(bank, farFuture);
     expect(bank).toContain(picked);
+  });
+
+  it("throws on an invalid date instead of returning undefined", () => {
+    expect(() => puzzleForDate([samplePuzzle], new Date(NaN))).toThrow();
   });
 });
 
