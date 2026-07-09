@@ -50,29 +50,29 @@ build implements to them, QA attacks them. Story 1 is the wow moment and ships f
 
 ## Epic 3 — Puzzle archive & content depth
 
-- [ ] **9. Puzzle archive / practice mode**
+- [x] **9. Puzzle archive / practice mode**
   - Past puzzles (by date) are listed and playable in a practice mode.
   - Practice-mode results do not change the daily streak.
   - The archive list is fully keyboard-navigable (arrow keys or tab order + enter to open).
 
-- [ ] **10. Expand bug bank to 30+ puzzles**
+- [x] **10. Expand bug bank to 30+ puzzles**
   - The bank contains at least 30 entries.
   - Each entry has a category tag (e.g. off-by-one, null-check, type-coercion, scoping).
   - No two entries in the same language share an identical buggy line of code.
 
-- [ ] **11. Difficulty/category filter for practice mode**
+- [x] **11. Difficulty/category filter for practice mode**
   - Selecting a category filters the visible archive list without a full page reload.
   - The active filter is reflected in the URL query string (shareable/bookmarkable).
   - An empty filter result shows a designed empty state, not a blank list.
 
-- [ ] **12. Design polish pass — archive/practice UI**
+- [x] **12. Design polish pass — archive/practice UI**
   - Archive list matches `docs/DESIGN.md` tokens.
   - All interactive targets are at least 44px for touch.
   - Empty and loading states are designed per the D2 craft rules, not left blank.
 
 ## Epic 4 — Onboarding & accessibility
 
-- [ ] **13. First-time onboarding walkthrough**
+- [x] **13. First-time onboarding walkthrough**
   - A visitor with no existing streak in `localStorage` sees a dismissible how-to-play overlay
     on first visit.
   - Dismissing the overlay is remembered in `localStorage` so it doesn't reappear.
